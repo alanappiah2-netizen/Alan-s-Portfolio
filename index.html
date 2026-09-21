@@ -75,7 +75,13 @@
       flex-direction: column;
     }
 
-    main { flex: 0 1 auto; }
+    /* ✅ FIX: Main expands to fill screen, pushing footer to the bottom */
+    main { 
+      flex: 1; 
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
 
     /* 🍃 Subtle animated leaf pattern overlay */
     body::before {
@@ -105,12 +111,30 @@
       border-bottom: 1px solid var(--border);
     }
     section:last-of-type { border-bottom: none; }
+    
     main > section { display: none !important; }
-    main > section.active-section { display: block !important; }
-    main > section#home.active-section { display: flex !important; }
-    main > section.active-section {
+    
+    /* ✅ FIX: Active sections fill the space and clear the sticky header */
+    main > section.active-section { 
+      display: flex !important; 
+      flex-direction: column;
+      flex: 1;
+      padding: 5rem 0 3rem; /* Top padding clears the ~69px sticky header */
       opacity: 1;
       transform: none;
+    }
+
+    /* ✅ FIX: Home section always fills the full viewport */
+    main > section#home.active-section { 
+      min-height: 100dvh;
+      justify-content: center;
+    }
+
+    /* ✅ FIX: Center content in naturally short sections to eliminate awkward bottom gaps */
+    #testimonials.active-section,
+    #faq.active-section,
+    #blog.active-section {
+      justify-content: center;
     }
 
     h1, h2, h3 {
@@ -153,7 +177,6 @@
       outline: 3px solid var(--accent);
       outline-offset: 3px;
     }
-
 
     /* Header & Nav - Mobile Optimized */
     header {
@@ -250,8 +273,6 @@
       background: var(--bg-alt);
       position: relative;
       overflow: hidden;
-      min-height: 100vh;
-      min-height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -860,13 +881,16 @@
       h2 { font-size: 1.5rem; }
       .btn { padding: 0.8rem 1.6rem; font-size: 0.95rem; }
 
-      /* ✅ HERO fills full mobile viewport */
+      /* ✅ FIX: All active sections fill the viewport below header, preventing empty gaps */
+      main > section.active-section {
+        padding-top: 4.5rem; /* Clears the sticky header */
+        padding-bottom: 2rem;
+      }
+
+      /* ✅ FIX: Ensure #home also clears header and fills screen nicely */
       #home {
         min-height: 100dvh;
-        min-height: 100vh;
-        padding: 1.5rem 0;
-        align-items: center;
-        justify-content: center;
+        padding: 4.5rem 0 2rem; 
       }
       #home > .container {
         padding-top: 0;
@@ -907,11 +931,8 @@
       
       .btn { padding: 0.75rem 1.4rem; font-size: 0.9rem; }
 
-      /* ✅ HERO fills full small mobile viewport */
       #home {
-        min-height: 100dvh;
-        min-height: 100vh;
-        padding: 1rem 0;
+        padding: 4.5rem 0 1.5rem;
       }
       #home h1 {
         font-size: clamp(1.6rem, 8vw, 2.2rem);
@@ -943,7 +964,7 @@
       section { padding: 3rem 0; }
       
       .faq-grid { margin: 1rem auto 0; }
-      .faq-item { padding: 0.9rem; }
+      .faq-item { padding: 0.8rem; }
       
       .contact-grid { gap: 1.5rem; }
       .contact-info li { font-size: 0.9rem; }
@@ -965,9 +986,7 @@
       .btn { padding: 0.7rem 1.2rem; font-size: 0.85rem; }
 
       #home {
-        min-height: 100dvh;
-        min-height: 100vh;
-        padding: 0.75rem 0;
+        padding: 4rem 0 1rem;
       }
       #home h1 {
         font-size: 1.5rem;
@@ -1029,21 +1048,19 @@
     <section id="about">
       <div class="container">
         <div class="about-grid">
-          <!-- Replace Hero.png with your own profile photo, keeping the file in this same folder. -->
           <div class="about-img animate-on-scroll" id="profile-photo">
             <img 
-              src="Xup.png" 
+              src="xup.png" 
               alt="Appiah-Appiagyei Alan, graphic designer from Accra, Ghana" 
               loading="eager"
-              onerror="this.parentElement.innerHTML='<div class=\'about-img-placeholder\'><i>📷</i><br><strong>Add Your Photo</strong><br><small>Place your image here as Hero.png</small></div>';"
+              onerror="this.parentElement.innerHTML='<div class=\'about-img-placeholder\'><i>📷</i><br><strong>Add Your Photo</strong><br><small>Place your image here as xup.png</small></div>';"
             >
           </div>
           <div class="animate-on-scroll">
             <h2>About Alan</h2>
             <p>I'm Appiah-Appiagyei Alan a 15 year old graphic designer and web designer from Ghana. I'm the founder of Alan Studio. I started designing because every small business deserves to look professional and get noticed, even with a small budget.</p>
-            <p>Because of my age, I see things differently. I grew up online, so I understand what makes people stop scrolling, what looks moden, and how to connect with today's customers. I do most of my design work in Canva, I recently started learning Figma, and I'm about to learn more professional tools like Photoshop and Ilustrator.  On the coding side, I'm  building my skills in web design and python, and I'm planning to learn app development next.</p>
-            <p>I'm not just building a portfolio, I'm building partnerships. When you work with me, you get clear comunication, quick turnaround, designs made with your business goals in mind, and affordable rates that make sense for small business. If you'
-				re ready to make your business look bigger and more trusted, let's create something great together.</p>
+            <p>Because of my age, I see things differently. I grew up online, so I understand what makes people stop scrolling, what looks moden, and how to connect with today's customers. I do most of my design work in Canva, I recently started learning Figma, and I'm about to learn more professional tools like Photoshop and Ilustrator. On the coding side, I'm building my skills in web design and python, and I'm planning to learn app development next.</p>
+            <p>I'm not just building a portfolio, I'm building partnerships. When you work with me, you get clear comunication, quick turnaround, designs made with your business goals in mind, and affordable rates that make sense for small business. If you're ready to make your business look bigger and more trusted, let's create something great together.</p>
           </div>
         </div>
       </div>
@@ -1103,7 +1120,7 @@
             </div>
           </article>
 
-		     <article class="project-card animate-on-scroll" data-title="Album Cover" tabindex="0" role="button" aria-label="Preview Brand Logo">
+          <article class="project-card animate-on-scroll" data-title="Album Cover" tabindex="0" role="button" aria-label="Preview Album Cover">
             <div class="project-img">
               <img src="Album Cover 2.png" alt="Album Cover" loading="eager" onerror="this.parentElement.innerHTML='Album Cover'">
             </div>
@@ -1122,7 +1139,7 @@
         <h2 class="animate-on-scroll">Services</h2>
         <div class="services-grid">
           <div class="service-card animate-on-scroll">
-            <h3>🌱 Starter Brand Kit</h3>
+            <h3> Starter Brand Kit</h3>
             <p>Perfect for new businesses or rebrands.</p>
             <ul>
               <li>Custom logo (2 concepts + 1 final)</li>
@@ -1132,7 +1149,7 @@
             </ul>
           </div>
           <div class="service-card animate-on-scroll">
-            <h3>🖨️ Print-Ready Designs</h3>
+            <h3> Print-Ready Designs</h3>
             <p>Flyers, posters, or business cards that get results.</p>
             <ul>
               <li>1 or 2-sided layout</li>
@@ -1142,7 +1159,7 @@
             </ul>
           </div>
           <div class="service-card animate-on-scroll">
-            <h3>📱 Social Media Graphics</h3>
+            <h3> Social Media Graphics</h3>
             <p>Stay consistent and eye-catching online.</p>
             <ul>
               <li>5 custom templates (posts/stories)</li>
@@ -1162,7 +1179,7 @@
             </ul>
           </div>
           <div class="service-card animate-on-scroll">
-            <h3>✨ Mini Brand Refresh</h3>
+            <h3> Mini Brand Refresh</h3>
             <p>Already have a logo but want to level up?</p>
             <ul>
               <li>Updated color scheme or typography</li>
@@ -1188,7 +1205,7 @@
             <cite>What I Deliver</cite>
           </blockquote>
         </div>
-		<p style="text-align: center; margin-top: 24px; opacity: 0.7;">Real client reviews coming soon.</p>
+        <p style="text-align: center; margin-top: 24px; opacity: 0.7;">Real client reviews coming soon.</p>
       </div>
     </section>
 
@@ -1202,15 +1219,15 @@
           </details>
           <details class="faq-item animate-on-scroll">
             <summary>How many revisions do I get?</summary>
-            <p>Every package comes with 2 fee revisions so we can make it perfect. Small tweak after that are still free I want you to love the final result.</p>
+            <p>Every package comes with 2 free revisions so we can make it perfect. Small tweaks after that are still free, I want you to love the final result.</p>
           </details>
           <details class="faq-item animate-on-scroll">
             <summary>What file formats will I receive?</summary>
-            <p>You'll get JPG and PNG for online use, PDF for printing, and your editable Canva link so you can make small changes yourself laer. If we work in Figma, you'll get that link too.</p>
+            <p>You'll get JPG and PNG for online use, PDF for printing, and your editable Canva link so you can make small changes yourself later. If we work in Figma, you'll get that link too.</p>
           </details>
           <details class="faq-item animate-on-scroll">
             <summary>Do you require upfront payment?</summary>
-            <p>Yes, a 50% upfront to secure your spot, and the other 50% once you're happy with the work, before I send the final files. You can pay via MoMo I'll share the details on your invoice</p>
+            <p>Yes, 50% upfront to secure your spot, and the other 50% once you're happy with the work, before I send the final files. You can pay via MoMo, I'll share the details on your invoice.</p>
           </details>
         </div>
       </div>
@@ -1251,7 +1268,6 @@
               <li>📍 Accra, Ghana</li>
             </ul>
           </div>
-          <!-- ✅ FORMSPREE INTEGRATED - Messages go to hello@alanappiah2.com -->
           <form action="https://formspree.io/f/xoevvzlj" method="POST" class="animate-on-scroll">
             <input type="text" name="name" placeholder="Your Name" required aria-label="Your Name">
             <input type="email" name="email" placeholder="Your Email" required aria-label="Your Email">
@@ -1292,13 +1308,11 @@
         navToggle.setAttribute('aria-expanded', !expanded);
         navLinks.classList.toggle('active');
         
-        // Prevent body scroll when menu is open on mobile
         if (window.innerWidth <= 900) {
           document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
         }
       });
       
-      // Close mobile menu when clicking a link
       document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
           navLinks.classList.remove('active');
@@ -1307,7 +1321,6 @@
         });
       });
 
-      // Close menu when clicking outside
       document.addEventListener('click', (e) => {
         if (window.innerWidth <= 900 && 
             navLinks.classList.contains('active') && 
@@ -1383,7 +1396,7 @@
         }
       });
 
-      // Show one section at a time and keep navigation state in the URL.
+      // Show one section at a time
       const sections = [...document.querySelectorAll('main > section')];
       const sectionLinks = [...document.querySelectorAll('.nav-links a, a[href^="#"]')];
 
@@ -1432,17 +1445,15 @@
       window.addEventListener('popstate', () => showSection(location.hash.slice(1), false));
       showSection(location.hash.slice(1) || 'home', false);
 
-      // Form Submission with Formspree
+      // Form Submission
       const form = document.querySelector('form');
       if (form) {
         form.addEventListener('submit', async (e) => {
           const btn = form.querySelector('button[type="submit"]');
           const originalText = btn.innerHTML;
           
-          // Only intercept if using Formspree
           if (form.action.includes('formspree.io')) {
             e.preventDefault();
-            
             btn.innerHTML = 'Sending... 🌱'; 
             btn.disabled = true;
             
@@ -1477,7 +1488,6 @@
         });
       }
 
-      // Handle window resize for mobile menu
       let resizeTimer;
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
