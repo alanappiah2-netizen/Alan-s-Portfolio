@@ -16,7 +16,7 @@
   
   <style>
     :root {
-      /* 🌿 Nature-inspired palette */
+      /* 🌿 Nature-inspired palette mixed with modern digital accents */
       --bg: #070a12;
       --bg-alt: #101625;
       --bg-card: #151d2f;
@@ -38,6 +38,7 @@
       --transition-fast: 0.2s ease;
       --transition-smooth: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
+
     .nav-links a.active {
       color: var(--text);
       border-radius: 6px;
@@ -53,6 +54,96 @@
 
     .service-card:hover {
       border-color: var(--border-hover);
+    }
+
+    /* ✅ DYNAMIC WHATSAPP TRANSITION */
+    #wa-transition {
+      position: fixed; 
+      inset: 0;
+      background: rgba(7, 10, 18, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    #wa-transition.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .wa-content {
+      text-align: center;
+      color: white;
+      transform: scale(0.8) translateY(20px);
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      padding: 2rem;
+      max-width: 90vw;
+    }
+
+    #wa-transition.show .wa-content {
+      transform: scale(1) translateY(0);
+    }
+
+    .wa-rocket {
+      font-size: clamp(60px, 15vw, 90px);
+      display: inline-block;
+      animation: rocketCrazy 0.8s infinite ease-in-out, glowPulse 1s infinite alternate;
+      filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.8));
+    }
+
+    @keyframes rocketCrazy {
+      0% { transform: translateY(0) rotate(-8deg) scale(1); }
+      25% { transform: translateY(-20px) rotate(8deg) scale(1.1); }
+      50% { transform: translateY(-10px) rotate(-8deg) scale(1.15); }
+      75% { transform: translateY(-25px) rotate(8deg) scale(1.05); }
+      100% { transform: translateY(0) rotate(-8deg) scale(1); }
+    }
+
+    @keyframes glowPulse {
+      0% { filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.6)); }
+      100% { filter: drop-shadow(0 0 30px rgba(0, 229, 255, 1)) drop-shadow(0 0 50px rgba(59, 130, 246, 0.8)); }
+    }
+
+    .wa-content h2 {
+      font-size: clamp(1.4rem, 5vw, 2rem);
+      margin: 20px 0 10px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #00e5ff, #3b82f6, #00e5ff);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 2s linear infinite;
+    }
+
+    .wa-content p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+
+    .wa-dots span {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background: #25d366;
+      border-radius: 50%;
+      margin: 0 6px;
+      animation: bounceCrazy 0.8s infinite ease-in-out;
+      box-shadow: 0 0 10px #25d366;
+    }
+
+    .wa-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .wa-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes bounceCrazy {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-18px) scale(1.3); }
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -75,7 +166,6 @@
       flex-direction: column;
     }
 
-    /* ✅ FIX: Main expands to fill screen, pushing footer to the bottom */
     main { 
       flex: 1; 
       display: flex;
@@ -83,7 +173,6 @@
       position: relative;
     }
 
-    /* 🍃 Subtle animated leaf pattern overlay */
     body::before {
       content: '';
       position: fixed;
@@ -114,26 +203,26 @@
     
     main > section { display: none !important; }
     
-    /* ✅ FIX: Active sections fill the space and clear the sticky header */
+    /* ✅ FIX: Active sections fill the screen below header, preventing empty gaps */
     main > section.active-section { 
       display: flex !important; 
       flex-direction: column;
-      flex: 1;
-      padding: 5rem 0 3rem; /* Top padding clears the ~69px sticky header */
-      opacity: 1;
-      transform: none;
+      min-height: calc(100dvh - 70px);
+      padding: 2rem 0;
     }
 
-    /* ✅ FIX: Home section always fills the full viewport */
+    /* ✅ FIX: Center content in naturally short sections */
+    #testimonials.active-section .container,
+    #faq.active-section .container,
+    #blog.active-section .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
+    }
+
     main > section#home.active-section { 
       min-height: 100dvh;
-      justify-content: center;
-    }
-
-    /* ✅ FIX: Center content in naturally short sections to eliminate awkward bottom gaps */
-    #testimonials.active-section,
-    #faq.active-section,
-    #blog.active-section {
       justify-content: center;
     }
 
@@ -178,7 +267,6 @@
       outline-offset: 3px;
     }
 
-    /* Header & Nav - Mobile Optimized */
     header {
       position: sticky;
       top: 0; 
@@ -209,7 +297,6 @@
       white-space: nowrap;
     }
     
-    /* Mobile Menu Toggle - Larger touch target */
     .nav-toggle {
       display: none;
       flex-direction: column;
@@ -266,7 +353,6 @@
     .nav-links a:hover::after,
     .nav-links a:focus::after { width: 100%; }
 
-    /* HERO - Mobile Optimized */
     #home {
       text-align: center; 
       padding: 6rem 0 4rem;
@@ -306,12 +392,8 @@
       color: var(--text); 
       line-height: 1.7;
     }
+    #home .btn { margin-inline: auto; }
 
-    #home .btn {
-      margin-inline: auto;
-    }
-
-    /* ABOUT - Mobile Grid */
     .about-grid {
       display: grid;
       grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.15fr);
@@ -319,12 +401,7 @@
       align-items: center;
     }
 
-    .about-grid > *,
-    .contact-grid > *,
-    .portfolio-grid > *,
-    .services-grid > *,
-    .testimonial-grid > *,
-    .blog-grid > * {
+    .about-grid > *, .contact-grid > *, .portfolio-grid > *, .services-grid > *, .testimonial-grid > *, .blog-grid > * {
       min-width: 0;
     }
     
@@ -355,9 +432,8 @@
       object-position: center;
       transition: transform 0.5s ease; 
     }
-    .about-img:hover img {
-      transform: scale(1.05); 
-    }
+    .about-img:hover img { transform: scale(1.05); }
+    
     .about-img-placeholder {
       text-align: center;
       padding: 2rem;
@@ -370,7 +446,6 @@
       display: block;
     }
 
-    /* PORTFOLIO - Mobile Grid */
     #portfolio { background: var(--bg-alt); }
     .portfolio-grid {
       display: grid; 
@@ -433,9 +508,8 @@
     .project-card:hover .project-img {
       background: linear-gradient(135deg, rgba(46,125,50,0.15), rgba(198,40,40,0.1));
     }
-    .project-card:hover .project-img img {
-      transform: scale(1.05);
-    }
+    .project-card:hover .project-img img { transform: scale(1.05); }
+    
     .project-info { padding: 1rem; }
     .project-info span { 
       font-size: 0.75rem;
@@ -448,11 +522,8 @@
       transition: color var(--transition-fast);
       font-size: 1.1rem;
     }
-    .project-card:hover .project-info h3 {
-      color: var(--text);
-    }
+    .project-card:hover .project-info h3 { color: var(--text); }
 
-    /* SERVICES - Mobile Grid */
     .services-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); 
@@ -495,7 +566,6 @@
     .service-card li { margin-bottom: 0.35rem; transition: color var(--transition-fast); }
     .service-card:hover li { color: var(--text); }
 
-    /* TESTIMONIALS - Mobile Grid */
     #testimonials { background: var(--bg-alt); }
     .testimonial-grid {
       display: grid; 
@@ -543,7 +613,6 @@
       margin-top: 0.4rem; 
     }
 
-    /* FAQ - Mobile */
     #faq { background: var(--bg-alt); }
     .faq-grid {
       max-width: 700px; 
@@ -582,7 +651,6 @@
       font-size: 0.95rem;
     }
 
-    /* BLOG - Mobile Grid */
     .blog-grid { 
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
@@ -628,7 +696,6 @@
     }
     .blog-card:hover h3 { color: var(--text); }
 
-    /* CONTACT - Mobile Stack */
     .contact-grid { 
       display: grid;
       grid-template-columns: minmax(0, 0.85fr) minmax(280px, 1.15fr);
@@ -688,7 +755,6 @@
     }
     textarea { min-height: 120px; resize: vertical; }
 
-    /* FOOTER */
     footer {
       text-align: center;
       padding: 2rem 0;
@@ -700,7 +766,6 @@
     footer p { margin: 0; transition: color var(--transition-fast); }
     footer:hover p { color: var(--text); }
 
-    /* ANIMATIONS */
     @keyframes fadeInUp { 
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
@@ -730,7 +795,6 @@
       transform: translateY(0);
     }
 
-    /* Staggered animation delays */
     .portfolio-grid .project-card:nth-child(1) { transition-delay: 0.1s; }
     .portfolio-grid .project-card:nth-child(2) { transition-delay: 0.2s; }
     .portfolio-grid .project-card:nth-child(3) { transition-delay: 0.3s; }
@@ -747,7 +811,6 @@
     .blog-grid .blog-card:nth-child(2) { transition-delay: 0.2s; }
     .blog-grid .blog-card:nth-child(3) { transition-delay: 0.3s; }
 
-    /* WhatsApp Button - Mobile Safe */
     .whatsapp-btn {
       position: fixed;
       bottom: 1.2rem;
@@ -778,7 +841,6 @@
       outline-offset: 3px;
     }
 
-    /* Lightbox - Mobile Optimized */
     .lightbox {
       position: fixed; 
       inset: 0;
@@ -825,7 +887,6 @@
       font-size: 0.95rem;
     }
 
-    /* Accessibility & Performance */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { 
         animation-duration: 0.01ms !important; 
@@ -839,7 +900,6 @@
       }
     }
     
-    /* ===== MOBILE RESPONSIVE (≤900px) ===== */
     @media (max-width: 900px) {
       html { min-height: 0; }
       body { min-height: 0; }
@@ -871,31 +931,23 @@
         justify-content: center;
       }
 
-      .about-grid,
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
       
       :root { --spacing: 3.5rem; }
       h1 { font-size: 1.9rem; }
       h2 { font-size: 1.5rem; }
       .btn { padding: 0.8rem 1.6rem; font-size: 0.95rem; }
 
-      /* ✅ FIX: All active sections fill the viewport below header, preventing empty gaps */
       main > section.active-section {
-        padding-top: 4.5rem; /* Clears the sticky header */
+        padding-top: 2rem;
         padding-bottom: 2rem;
       }
 
-      /* ✅ FIX: Ensure #home also clears header and fills screen nicely */
       #home {
         min-height: 100dvh;
         padding: 4.5rem 0 2rem; 
       }
-      #home > .container {
-        padding-top: 0;
-        padding-bottom: 0;
-      }
+      #home > .container { padding-top: 0; padding-bottom: 0; }
       #home h1 {
         margin-bottom: 1rem;
         font-size: clamp(1.8rem, 7vw, 2.5rem);
@@ -905,9 +957,7 @@
         font-size: 1rem;
         line-height: 1.6;
       }
-      #home .btn {
-        margin-top: 0.5rem;
-      }
+      #home .btn { margin-top: 0.5rem; }
       
       .about-img { width: min(100%, 360px); }
       .project-img { aspect-ratio: 4 / 3; height: auto; }
@@ -920,55 +970,32 @@
       }
     }
     
-    /* ===== SMALL MOBILE (≤480px) ===== */
     @media (max-width: 480px) {
       .nav-links a { font-size: 0.95rem; padding: 0.7rem 0.5rem; }
-      
       h1 { font-size: clamp(1.7rem, 8vw, 2.15rem); }
       h2 { font-size: 1.4rem; }
       h3 { font-size: 1.05rem; }
       p { font-size: 0.95rem; }
-      
       .btn { padding: 0.75rem 1.4rem; font-size: 0.9rem; }
 
-      #home {
-        padding: 4.5rem 0 1.5rem;
-      }
-      #home h1 {
-        font-size: clamp(1.6rem, 8vw, 2.2rem);
-        margin-bottom: 0.8rem;
-      }
-      #home p {
-        margin: 0.8rem auto 1.2rem;
-        font-size: 0.95rem;
-        line-height: 1.6;
-      }
-      #home .btn {
-        width: 100%;
-        max-width: 280px;
-        padding: 0.9rem 1.5rem;
-      }
+      #home { padding: 4.5rem 0 1.5rem; }
+      #home h1 { font-size: clamp(1.6rem, 8vw, 2.2rem); margin-bottom: 0.8rem; }
+      #home p { margin: 0.8rem auto 1.2rem; font-size: 0.95rem; line-height: 1.6; }
+      #home .btn { width: 100%; max-width: 280px; padding: 0.9rem 1.5rem; }
       
       .about-grid { gap: 1.5rem; }
       
-      .portfolio-grid,
-      .services-grid,
-      .testimonial-grid,
-      .blog-grid {
+      .portfolio-grid, .services-grid, .testimonial-grid, .blog-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
       }
       
       .project-img { aspect-ratio: 4 / 3; height: auto; }
-      
       section { padding: 3rem 0; }
-      
       .faq-grid { margin: 1rem auto 0; }
       .faq-item { padding: 0.8rem; }
-      
       .contact-grid { gap: 1.5rem; }
       .contact-info li { font-size: 0.9rem; }
-      
       footer { padding: 1.5rem 0; font-size: 0.8rem; }
       
       .whatsapp-btn { 
@@ -980,27 +1007,13 @@
       }
     }
     
-    /* ===== EXTRA SMALL (≤360px) ===== */
     @media (max-width: 360px) {
       h1 { font-size: 1.6rem; }
       .btn { padding: 0.7rem 1.2rem; font-size: 0.85rem; }
-
-      #home {
-        padding: 4rem 0 1rem;
-      }
-      #home h1 {
-        font-size: 1.5rem;
-        margin-bottom: 0.6rem;
-      }
-      #home p {
-        margin: 0.6rem auto 1rem;
-        font-size: 0.9rem;
-      }
-      #home .btn {
-        width: 100%;
-        max-width: 260px;
-        padding: 0.8rem 1.2rem;
-      }
+      #home { padding: 4rem 0 1rem; }
+      #home h1 { font-size: 1.5rem; margin-bottom: 0.6rem; }
+      #home p { margin: 0.6rem auto 1rem; font-size: 0.9rem; }
+      #home .btn { width: 100%; max-width: 260px; padding: 0.8rem 1.2rem; }
     }
 
     @media (min-width: 901px) {
@@ -1015,7 +1028,6 @@
       <nav>
         <a href="#home" class="logo">Alan Studio</a>
         
-        <!-- Mobile Menu Toggle -->
         <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
           <span></span>
           <span></span>
@@ -1059,8 +1071,8 @@
           <div class="animate-on-scroll">
             <h2>About Alan</h2>
             <p>I'm Appiah-Appiagyei Alan a 15 year old graphic designer and web designer from Ghana. I'm the founder of Alan Studio. I started designing because every small business deserves to look professional and get noticed, even with a small budget.</p>
-            <p>Because of my age, I see things differently. I grew up online, so I understand what makes people stop scrolling, what looks moden, and how to connect with today's customers. I do most of my design work in Canva, I recently started learning Figma, and I'm about to learn more professional tools like Photoshop and Ilustrator. On the coding side, I'm building my skills in web design and python, and I'm planning to learn app development next.</p>
-            <p>I'm not just building a portfolio, I'm building partnerships. When you work with me, you get clear comunication, quick turnaround, designs made with your business goals in mind, and affordable rates that make sense for small business. If you're ready to make your business look bigger and more trusted, let's create something great together.</p>
+            <p>Because of my age, I see things differently. I grew up online, so I understand what makes people stop scrolling, what looks modern, and how to connect with today's customers. I do most of my design work in Canva, I recently started learning Figma, and I'm about to learn more professional tools like Photoshop and Illustrator. On the coding side, I'm building my skills in web design and python, and I'm planning to learn app development next.</p>
+            <p>I'm not just building a portfolio, I'm building partnerships. When you work with me, you get clear communication, quick turnaround, designs made with your business goals in mind, and affordable rates that make sense for small business. If you're ready to make your business look bigger and more trusted, let's create something great together.</p>
           </div>
         </div>
       </div>
@@ -1082,7 +1094,7 @@
           
           <article class="project-card animate-on-scroll" data-title="Modern Business Card" tabindex="0" role="button" aria-label="Preview Modern Business Card">
             <div class="project-img">
-              <img src="Business card.png" alt="Modern Business Card Design" loading="eager" onerror="this.parentElement.innerHTML='Business Card'">
+              <img src="file_00000000494c81f48b4ecba5b40685fe.png" alt="Modern Business Card Design" loading="eager" onerror="this.parentElement.innerHTML='Business Card'">
             </div>
             <div class="project-info">
               <h3>Modern Business Card</h3>
@@ -1120,16 +1132,8 @@
             </div>
           </article>
 
-          <article class="project-card animate-on-scroll" data-title="Album Cover" tabindex="0" role="button" aria-label="Preview Album Cover">
-            <div class="project-img">
-              <img src="Album Cover 2.png" alt="Album Cover" loading="eager" onerror="this.parentElement.innerHTML='Album Cover'">
-            </div>
-            <div class="project-info">
-              <h3>Album Cover</h3>
-              <span>Cover Art</span>
-            </div>
-          </article>
           
+         
         </div>
       </div>
     </section>
@@ -1139,53 +1143,53 @@
         <h2 class="animate-on-scroll">Services</h2>
         <div class="services-grid">
           <div class="service-card animate-on-scroll">
-            <h3> Starter Brand Kit</h3>
-            <p>Perfect for new businesses or rebrands.</p>
+            <h3>Flyer & Poster Design</h3>
+            <p>Eye-catching designs that get customers to stop and look.</p>
             <ul>
-              <li>Custom logo (2 concepts + 1 final)</li>
-              <li>Color palette & font suggestions</li>
-              <li>Basic brand guide (PDF)</li>
+              <li>1 design concept + 2 revisions</li>
+              <li>Print-ready PDF + JPG for Whatsapp</li>
+              <li>Delivered in 24 hours</li>
+              <li>From 80 GHS</li>
+            </ul>
+          </div>
+          <div class="service-card animate-on-scroll">
+            <h3>Logo Design</h3>
+            <p>Simple, clean logos made in Canva / Figma</p>
+            <ul>
+              <li>2 logo concepts + 1 final</li>
+              <li>Color + font list included</li>
               <li>Editable Canva/Figma link</li>
+              <li>From 150 GHS</li>
             </ul>
           </div>
           <div class="service-card animate-on-scroll">
-            <h3> Print-Ready Designs</h3>
-            <p>Flyers, posters, or business cards that get results.</p>
+            <h3>Social Media Graphics</h3>
+            <p>Simple posts for Instagram & Whatsapp status that look clean.</p>
             <ul>
-              <li>1 or 2-sided layout</li>
-              <li>Print-ready PDF + digital version</li>
-              <li>2 rounds of revisions</li>
-              <li>Optimized for local printers</li>
+              <li>5 posts/stories with your colors</li>
+              <li>Canva link to edit yourself</li>
+              <li>Made for phone first</li>
+              <li>From 70 GHS</li>
             </ul>
           </div>
           <div class="service-card animate-on-scroll">
-            <h3> Social Media Graphics</h3>
-            <p>Stay consistent and eye-catching online.</p>
+            <h3>Custom T-Shirt Design</h3>
+            <p>I design it, you print it. I don't print shirts</p>
             <ul>
-              <li>5 custom templates (posts/stories)</li>
-              <li>Branded colors, fonts, and style</li>
-              <li>Editable in Canva</li>
-              <li>Usage tips included</li>
+              <li>1 font design</li>
+              <li>PNG file for your printer</li>
+              <li>Mockup to see how it looks</li>
+              <li>From 60 GHS</li>
             </ul>
           </div>
           <div class="service-card animate-on-scroll">
-            <h3> Custom T-Shirt Design</h3>
-            <p>Stand out at events, markets, or online.</p>
+            <h3>Business Card & Invites</h3>
+            <p>Simple cards for business, birthdays, weddings.</p>
             <ul>
-              <li>1 unique design concept</li>
-              <li>Print-ready file (PNG + vector if needed)</li>
-              <li>Mockup preview</li>
-              <li>Great for teams or promotions</li>
-            </ul>
-          </div>
-          <div class="service-card animate-on-scroll">
-            <h3> Mini Brand Refresh</h3>
-            <p>Already have a logo but want to level up?</p>
-            <ul>
-              <li>Updated color scheme or typography</li>
-              <li>3 social media banner designs</li>
-              <li>Simple style guide</li>
-              <li>Quick turnaround, big impact</li>
+              <li>Clean front & back design</li>
+              <li>JPG + PDF to print yourself</li>
+              <li>Fast - ready in 1 day</li>
+              <li>From 50 GHS</li>
             </ul>
           </div>
         </div>
@@ -1214,19 +1218,19 @@
         <h2 class="animate-on-scroll">Frequently Asked Questions</h2>
         <div class="faq-grid">
           <details class="faq-item animate-on-scroll">
-            <summary>What's your typical turnaround time?</summary>
-            <p>Most designs like flyers, posters or logos take 2-3 days. Bigger project like brand identity or websites take a bit longer. I'll give you a clear delivery date before we start, so you know exactly when to expect it.</p>
+            <summary>What's your typical turnaround time? </summary>
+            <p>Most designs like flyers, posters or logos take 2-3 days. Bigger projects like brand identity or websites take a bit longer. I'll give you a clear delivery date before we start, so you know exactly when to expect it.</p>
           </details>
           <details class="faq-item animate-on-scroll">
-            <summary>How many revisions do I get?</summary>
+            <summary>How many revisions do I get? </summary>
             <p>Every package comes with 2 free revisions so we can make it perfect. Small tweaks after that are still free, I want you to love the final result.</p>
           </details>
           <details class="faq-item animate-on-scroll">
-            <summary>What file formats will I receive?</summary>
+            <summary>What file formats will I receive? </summary>
             <p>You'll get JPG and PNG for online use, PDF for printing, and your editable Canva link so you can make small changes yourself later. If we work in Figma, you'll get that link too.</p>
           </details>
           <details class="faq-item animate-on-scroll">
-            <summary>Do you require upfront payment?</summary>
+            <summary>Do you require upfront payment? </summary>
             <p>Yes, 50% upfront to secure your spot, and the other 50% once you're happy with the work, before I send the final files. You can pay via MoMo, I'll share the details on your invoice.</p>
           </details>
         </div>
@@ -1238,19 +1242,19 @@
         <h2 class="animate-on-scroll">Blog</h2>
         <div class="blog-grid">
           <article class="blog-card animate-on-scroll">
-            <time>May 15, 2026</time>
-            <h3>Why Small Businesses Need Clean Design</h3>
-            <p>Minimalism isn't just a trend — it's a conversion tool. Here's how...</p>
+            <h3>How I Make Flyers People Can Read</h3>
+            <p>I don't use big grammar. Just clear text and good colors.</p>
+            <a href="#contact" style="display: inline-block; margin-top: 12px; background: #00e5cc; color: #000; padding: 8px 18px; border-radius: 20px; font-weight: 700; font-size: 13px; text-decoration: none;">Ask me about this →</a>
           </article>
           <article class="blog-card animate-on-scroll">
-            <time>Apr 28, 2026</time>
-            <h3>5 Free Tools I Use for Every Project</h3>
-            <p>From Figma to Canva, here's my exact workflow...</p>
+            <h3>2 Tools I Actually Use</h3>
+            <p>I use Canva for most work and sometimes Kittl for logos. That's what I know well.</p>
+            <a href="#contact" style="display: inline-block; margin-top: 12px; background: #00e5cc; color: #000; padding: 8px 18px; border-radius: 20px; font-weight: 700; font-size: 13px; text-decoration: none;">Ask me about this →</a>
           </article>
           <article class="blog-card animate-on-scroll">
-            <time>Apr 10, 2026</time>
-            <h3>How to Brief a Designer (Even on a Budget)</h3>
-            <p>Clear goals = better results. Here's how to prepare...</p>
+            <h3>How To Tell Me What You Want</h3>
+            <p>Send me your name, colors, and one example. That's all I need to start.</p>
+            <a href="#contact" style="display: inline-block; margin-top: 12px; background: #00e5cc; color: #000; padding: 8px 18px; border-radius: 20px; font-weight: 700; font-size: 13px; text-decoration: none;">Ask me about this →</a>
           </article>
         </div>
       </div>
@@ -1261,19 +1265,20 @@
         <h2 class="animate-on-scroll">Let's Work Together</h2>
         <div class="contact-grid">
           <div class="contact-info animate-on-scroll">
-            <p>Ready to elevate your brand's visuals? Fill out the form or reach out directly. I respond within 24 hours. 🌿</p>
+            <p>Need a flyer, logo or poster? Message me on WhatsApp. I work with Canva & Kittl. Data comes and goes here, so I reply when I'm back online sometimes same day, sometimes in 1-2 days.</p>
             <ul>
+              <li>📱 WhatsApp: +233 59 728 8418</li>
               <li>📧 hello@alanappiah2.com</li>
-              <li>📱 +233 59 728 8418</li>
-              <li>📍 Accra, Ghana</li>
+              <li>📍 Cape Coast, Ghana</li>
             </ul>
           </div>
-          <form action="https://formspree.io/f/xoevvzlj" method="POST" class="animate-on-scroll">
-            <input type="text" name="name" placeholder="Your Name" required aria-label="Your Name">
-            <input type="email" name="email" placeholder="Your Email" required aria-label="Your Email">
-            <input type="text" name="subject" placeholder="Project Type (e.g., Logo, Flyer, Brand Kit)" aria-label="Project Type">
-            <textarea name="message" placeholder="Tell me about your business & what you need..." required aria-label="Your Message"></textarea>
-            <button type="submit" class="btn">Send Message ✉️</button>
+          <!-- ✅ FIX: Added id="contact-form" and removed inline onsubmit -->
+          <form id="contact-form" class="animate-on-scroll">
+            <input id="wName" type="text" name="name" placeholder="Your Name" required aria-label="Your Name">
+            <input id="wNumber" type="text" name="WhatsApp" placeholder="Your WhatsApp Number" required aria-label="Your WhatsApp Number">
+            <input id="Wneed" type="text" name="subject" placeholder="Project Type (e.g., Logo, Flyer)" aria-label="Project Type">
+            <textarea id="wMsg" name="message" placeholder="Tell me about your business & what you need..." required aria-label="Your Message"></textarea>
+            <button type="submit" class="btn" style="background: linear-gradient(90deg, #00e5cc, #00ffb7); color: #000; font-weight: 800; box-shadow: 0 0 20px rgba(0, 229, 204, 0.6); transform: scale(1.02);">Let's Cook! 🔥</button>
           </form>
         </div>
       </div>
@@ -1282,7 +1287,8 @@
 
   <footer>
     <div class="container">
-      <p>&copy; 2026 Appiah-Appiagyei Alan. All rights reserved. Designed with Figma & ❤️ in Ghana 🇬🇭</p>
+      <p>&copy; <span id="year"></span> Appiah-Appiagyei Alan. - Built with Canva, Kittl & ❤️ in Cape Coast, GH. Let's Cook! 🔥</p>
+      <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
     </div>
   </footer>
 
@@ -1295,6 +1301,16 @@
     <button class="lightbox-close" aria-label="Close preview">&times;</button>
     <img src="" alt="Project Preview" id="lightbox-img">
     <p id="lightbox-caption"></p>
+  </div>
+
+  <!-- ✅ FIX: Moved inside body and fixed mismatched closing divs -->
+  <div id="wa-transition">
+    <div class="wa-content">
+      <div class="wa-rocket">🚀</div>
+      <h2>Launching to WhatsApp...</h2>
+      <p>Alan is ready to cook! 🔥</p>
+      <div class="wa-dots"><span></span><span></span><span></span></div>
+    </div>
   </div>
 
   <script>
@@ -1383,7 +1399,6 @@
         lightbox.classList.remove('active');
         document.body.style.overflow = '';
         lbImg.src = '';
-        lbImg.style.display = 'block';
       };
 
       lbClose?.addEventListener('click', closeLightbox);
@@ -1445,46 +1460,33 @@
       window.addEventListener('popstate', () => showSection(location.hash.slice(1), false));
       showSection(location.hash.slice(1) || 'home', false);
 
-      // Form Submission
-      const form = document.querySelector('form');
+      // ✅ FIX: Form Submission (Fixed typos: documet -> document, missing brackets, matched name attributes)
+      const form = document.getElementById('contact-form');
+      const waScreen = document.getElementById('wa-transition');
+      
       if (form) {
-        form.addEventListener('submit', async (e) => {
-          const btn = form.querySelector('button[type="submit"]');
-          const originalText = btn.innerHTML;
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
           
-          if (form.action.includes('formspree.io')) {
-            e.preventDefault();
-            btn.innerHTML = 'Sending... 🌱'; 
-            btn.disabled = true;
-            
-            try {
-              const formData = new FormData(form);
-              const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-              });
-              
-              if (response.ok) {
-                btn.innerHTML = 'Sent! ✓'; 
-                btn.style.background = 'linear-gradient(135deg, #2e7d32, #1b5e20)';
-                form.reset();
-                
-                setTimeout(() => {
-                  btn.innerHTML = originalText; 
-                  btn.disabled = false; 
-                  btn.style.background = '';
-                  alert('Thanks for reaching out! I\'ll get back to you within 24 hours. 🌿');
-                }, 2000);
-              } else {
-                throw new Error('Form submission failed');
-              }
-            } catch (error) {
-              btn.innerHTML = 'Try Again';
-              btn.disabled = false;
-              alert('Oops! Something went wrong. Please try again or message me on WhatsApp. 💬');
-            }
+          const name = form.querySelector('[name="name"]')?.value || '';
+          const whatsapp = form.querySelector('[name="WhatsApp"]')?.value || '';
+          const subject = form.querySelector('[name="subject"]')?.value || '';
+          const message = form.querySelector('[name="message"]')?.value || '';
+
+          const text = `Hello Alan!%0AName: ${encodeURIComponent(name)}%0AWhatsApp: ${encodeURIComponent(whatsapp)}%0ANeed: ${encodeURIComponent(subject)}%0ADetails: ${encodeURIComponent(message)}`;
+
+          // ✅ BONUS: Mobile Haptic Feedback (Makes the phone vibrate slightly for a premium feel)
+          if (navigator.vibrate) {
+            navigator.vibrate([50, 100, 50]);
           }
+
+          waScreen.classList.add('show');
+
+          setTimeout(() => {
+            window.open(`https://wa.me/233597288418?text=${text}`, '_blank');
+            form.reset();
+            setTimeout(() => waScreen.classList.remove('show'), 800);
+          }, 1600);
         });
       }
 
